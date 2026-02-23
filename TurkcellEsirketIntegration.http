@@ -1,0 +1,6 @@
+@TurkcellEsirketIntegration_HostAddress = http://localhost:5008
+
+GET {{TurkcellEsirketIntegration_HostAddress}}/api/
+Accept: application/json
+
+###

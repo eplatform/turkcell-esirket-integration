@@ -72,7 +72,7 @@ appsettings.json içinde Turkcell ayarları yapılmalıdır:
   "Password": "yourPassword",
   "ClientId": "serviceApi",
   "AuthUrl": "https://coretest.isim360.com/v1/token",
-  "BaseServiceUrl": "https://eirsaliyeservice.turkcellesirket.com" //örnek olarak irsaliye servisi eklenmiştir.
+  "BaseServiceUrl": "https://eirsaliyeservicetest.isim360.com" //örnek olarak irsaliye servisi eklenmiştir.
 }
 ```
 

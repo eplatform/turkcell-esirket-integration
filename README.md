@@ -2,7 +2,7 @@
 
 Bu proje, Turkcell e-Şirket ürünleri API entegrasyonu için geliştirilmiş .NET Web API uygulamasıdır.
 
-Servis, OAuth 2.0 ile token alır ve e-İrsaliye endpoint’lerine yetkili istek gönderir.
+Servis, OAuth 2.0 ile token alır ve turkcell e-şirket ürünleri endpoint’lerine yetkili istek gönderir.
 
 ### API Dokümantasyonu
 
@@ -67,12 +67,24 @@ Konfigürasyon
 appsettings.json içinde Turkcell ayarları yapılmalıdır:
 
  ```json
-"TurkcellSettings": {
-  "Username": "yourUserName",
-  "Password": "yourPassword",
-  "ClientId": "serviceApi",
-  "AuthUrl": "https://coretest.isim360.com/v1/token",
-  "BaseServiceUrl": "https://eirsaliyeservicetest.isim360.com" //örnek olarak irsaliye servisi eklenmiştir.
+"Integration": {
+  "Auth": {
+    "Username": "yourUserName",
+    "Password": "yourPassword",
+    "ClientId": "serviceApi",
+    "AuthUrl": "https://coretest.isim360.com/v1/token"
+  },
+  "Services": {
+    "Efatura": {
+      "BaseUrl": "https://efaturaservicetest.isim360.com"
+    },
+    "Eirsaliye": {
+      "BaseUrl": "https://eirsaliyeservicetest.isim360.com"
+    },
+    "Ebilet": {
+      "BaseUrl": "https://ebiletservicetest.isim360.com"
+    }
+  }
 }
 ```
 
@@ -80,7 +92,7 @@ Mimari:
 
 OAuth2 Token alma servisi
 MemoryCache ile token yönetimi
-IHttpClientFactory kullanımı
+Typed HttpClient kullanımı
 Swagger ile API test imkanı
 Serilog ile loglama altyapısı
 

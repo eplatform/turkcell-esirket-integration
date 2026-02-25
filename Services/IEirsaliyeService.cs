@@ -1,9 +1,10 @@
-namespace TurkcellEsirketIntegration.Services
-{
-    public interface IEirsaliyeService
-    {
-        Task<string> SendDispatchAsync(object model);
+using TurkcellEsirketIntegration.Models;
 
-        Task<string> GetStatusAsync(Guid id);
-    }
+namespace TurkcellEsirketIntegration.Services;
+
+public interface IEirsaliyeService
+{
+    Task<string> SendDispatchAsync(object model);
+
+    Task<DispatchStatusResponse> GetStatusAsync(Guid id);
 }

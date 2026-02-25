@@ -1,4 +1,3 @@
-using System.Reflection;
 using Serilog;
 using TurkcellEsirketIntegration.Services;
 using TurkcellEsirketIntegration.Settings;
@@ -13,18 +12,37 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
- builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                serverOptions.Listen(System.Net.IPAddress.Loopback, 5008);
-            });
+builder.WebHost.ConfigureKestrel(serverOptions =>
+           {
+               serverOptions.Listen(System.Net.IPAddress.Loopback, 5008);
+           });
 // Config
-builder.Services.Configure<TurkcellSettings>(builder.Configuration.GetSection("TurkcellSettings"));
+builder.Services.Configure<IntegrationAuthSettings>(
+    builder.Configuration.GetSection("Integration:Auth"));
 
 // Services
 builder.Services.AddMemoryCache();
-builder.Services.AddHttpClient();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IEirsaliyeService, EirsaliyeService>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+
+builder.Services.AddHttpClient<IEfaturaService, EfaturaService>(client =>
+{
+    var config = builder.Configuration
+           .GetSection("Integration:Services:Efatura")
+           .Get<ServiceEndpointSettings>();
+    client.BaseAddress = new Uri(config!.BaseUrl);
+});
+
+builder.Services.AddHttpClient<IEirsaliyeService, EirsaliyeService>(client =>
+{
+    var config = builder.Configuration
+        .GetSection("Integration:Services:Eirsaliye")
+        .Get<ServiceEndpointSettings>();
+
+    client.BaseAddress = new Uri(config!.BaseUrl);
+});
+
+// builder.Services.AddScoped<IEfaturaService, EfaturaService>();
+// builder.Services.AddScoped<IEirsaliyeService, EirsaliyeService>();
 
 // Controllers & Swagger
 builder.Services.AddControllers();

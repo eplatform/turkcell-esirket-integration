@@ -11,17 +11,17 @@ namespace TurkcellEsirketIntegration.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient client;
         private readonly IMemoryCache _cache;
-        private readonly TurkcellSettings _settings;
+        private readonly IntegrationAuthSettings _settings;
         private const string CacheKey = "TurkcellToken";
 
         public AuthService(
-            IHttpClientFactory httpClientFactory,
+            HttpClient httpClient,
             IMemoryCache cache,
-            IOptions<TurkcellSettings> options)
+            IOptions<IntegrationAuthSettings> options)
         {
-            _httpClientFactory = httpClientFactory;
+            client = httpClient;
             _cache = cache;
             _settings = options.Value;
         }
@@ -31,7 +31,6 @@ namespace TurkcellEsirketIntegration.Services
             if (_cache.TryGetValue(CacheKey, out string cachedToken))
                 return cachedToken;
 
-            var client = _httpClientFactory.CreateClient();
             var url = _settings.AuthUrl;
 
             var content = new FormUrlEncodedContent(new[]

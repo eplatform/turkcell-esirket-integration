@@ -1,16 +1,14 @@
 using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using TurkcellEsirketIntegration.Models;
 
 namespace TurkcellEsirketIntegration.Services;
 
-public class EirsaliyeService : IEirsaliyeService
+public class EfaturaService : IEfaturaService
 {
     private readonly HttpClient client;
     private readonly IAuthService authService;
 
-    public EirsaliyeService(
+    public EfaturaService(
         HttpClient client,
         IAuthService authService)
     {
@@ -18,16 +16,16 @@ public class EirsaliyeService : IEirsaliyeService
         this.authService = authService;
     }
 
-    public async Task<string> SendDispatchAsync(object model)
+    public async Task<SendInvoiceResponse> SendEfaturaAsync(object model)
     {
         var token = await authService.GetTokenAsync();
 
         using var request =
-              new HttpRequestMessage(HttpMethod.Post,
-              $"/v1/outboxdespatch/create");
-        request.Content = JsonContent.Create(model);
+               new HttpRequestMessage(HttpMethod.Post,
+               $"/v1/outboxinvoice/create");
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = JsonContent.Create(model);
 
         var response = await client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
@@ -40,23 +38,23 @@ public class EirsaliyeService : IEirsaliyeService
             // Hata fırlatıldı
             throw new ApplicationException($"API Hatası: {(int)response.StatusCode} - {content}");
         }
-
-        return await response.Content.ReadAsStringAsync();
+        return await response.Content.ReadFromJsonAsync<SendInvoiceResponse>();
     }
 
-    public async Task<DispatchStatusResponse> GetStatusAsync(Guid id)
+    public async Task<InvoiceStatusResponse> GetStatusAsync(Guid id)
     {
         var token = await authService.GetTokenAsync();
 
-      using var request =
-              new HttpRequestMessage(HttpMethod.Get,
-              $"/v2/outboxdespatch/{id}/status");
+        using var request =
+               new HttpRequestMessage(HttpMethod.Get,
+               $"/v2/outboxinvoice/{id}/status");
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<DispatchStatusResponse>();
+        return await response.Content.ReadFromJsonAsync<InvoiceStatusResponse>();
     }
+
 }

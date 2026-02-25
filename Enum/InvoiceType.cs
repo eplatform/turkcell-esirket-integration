@@ -1,0 +1,30 @@
+namespace TurkcellEsirketIntegration.Enum;
+
+public enum InvoiceType
+{
+    SATIS = 1,
+    IADE = 2,
+    ISTISNA = 3,
+    OZELMATRAH = 4,
+    TEVKIFAT = 5,
+    ARACTESCIL = 6,
+    IHRACKAYITLI = 7,
+    SGK = 8,
+    KOMISYONCU = 9,
+    SERBESTMESLEKMAKBUZU = 10,
+    MUSTAHSILMAKBUZ = 11,
+    HKSSATIS = 12,
+    HKSKOMISYONCU = 13,
+    STANDARTKODLU = 14,
+    TEVKIFATIADE = 15,
+    KONAKLAMAVERGISI = 17,
+    SARJ = 18,
+    SARJANLIK = 19,
+    TEKNOLOJIDESTEK = 20,
+    ADISYON = 21,
+    YTBSATIS = 22,
+    YTBISTISNA = 23,
+    YTBIADE = 24,
+    YTBTEVKIFAT = 25,
+    YTBTEVKIFATIADE = 26
+}
